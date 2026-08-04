@@ -1,8 +1,8 @@
 project:
 	echo "Building..."
-	gcc src/main.c -o bin/cgol
+	gcc main.c -o cgol
 clean:
-	echo "Cleaning files.."
-	rm -rf bin/cgol
+	echo "Cleaning files..."
+	rm -rf cgol
 run:
-	./bin/cgol
+	./cgol

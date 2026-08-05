@@ -7,13 +7,13 @@ Skip rules to [Pre-Building](#Pre-Building)
 The rules can be found at the [Conway's Game of Life Wiki](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#:~:text=Rulesedit).
 
 ### Rule 1: *Underpopulation*
-Any alive cells will die if there are fewer than two neighbouring alive cells.
+Any alive cells will die if there are fewer than two neighboring alive cells.
 ### Rule 2: *Survival*
-Any alive cells will live if there are two or three neighbouring alive cells.
+Any alive cells will live if there are two or three neighboring alive cells.
 ### Rule 3: *Overpopulation*
-Any alive cells will die if there are more than three neighbouring alive cells.
+Any alive cells will die if there are more than three neighboring alive cells.
 ### Rule 4: *Reproduction*
-Any dead cells will turn into an alive cell if there are **exactly** three neighbouring alive cells.
+Any dead cells will turn into an alive cell if there are **exactly** three neighboring alive cells.
 
 ## Pre-Building
 I made building this project very easy to build since this is just a project I made to teach myself more about C.

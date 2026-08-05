@@ -59,3 +59,8 @@ To remove the executable if you don't want it anymore or you are recompiling, us
 ```
 make clean
 ```
+
+## Educational Experimentation
+Look, I know nobody is really going to download this repo to run it.
+I doubt that anybody is really going to see this, but I have tried to organize my C code with comments so I can learn from this and maybe somebody else can learn from this.
+This repo is designed to experiment around and have fun passing the time, so enjoy.

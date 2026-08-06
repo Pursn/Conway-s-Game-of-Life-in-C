@@ -1,9 +1,9 @@
 /****************************************************************************
- *FILENAME:     main.c
- *DESCRIPTION:  It's a simple version of Conway's Game of Life written in C.
- *CREATOR:      Jose Duarte
- *DATE:         August 5, 2026
- *LICENSE:      GPL-3.0 license
+ * FILENAME:     main.c
+ * DESCRIPTION:  It's a simple version of Conway's Game of Life written in C.
+ * CREATOR:      Jose Duarte
+ * DATE:         August 5, 2026
+ * LICENSE:      GPL-3.0 license
  ****************************************************************************/
 #include <stdio.h>  //The Standard Input Output header file
 #include <stdlib.h> //The Standard Library header file - Useful utilities
@@ -17,7 +17,7 @@
 //2 frames per second - I left it slow instead of 60 FPS since we want to see these changes
 #define FPS 2
 //We want to know how long each frame is in milliseconds so we can know when to change frame
-#define FRAME_LENGTH (1000.0/FPS) //1000.0 milliseconds divided by 60 FPS = 16.66 milliseconds
+#define FRAME_LENGTH (1000.0/FPS) //1000.0 milliseconds (1 second) divided by 2 FPS = 500.0 milliseconds
 
 //I have this so when the grid is blank, it will stop running
 bool running = true;
@@ -25,7 +25,7 @@ bool running = true;
 //Notes:
 //This is how the grid is going to work.
 //We will be using a 2D array, where each cell can be DEAD or ALIVE
-//.....     [0,0][0,1][0,2][0,3][0,4]  
+//.....     [0,0][0,1][0,2][0,3][0,4]
 //.....     [1,0][1,1][1,2][1,3][1,4]
 //.***. --> [2,0][2,1][2,2][2,3][2,4]
 //.....     [3,0][3,1][3,2][3,3][3,4]
@@ -37,7 +37,7 @@ bool running = true;
 
 
 
-//We are creating a type called "Cell" that is an enum which can be DEAD or ALIVE
+//We are creating a type called "Cell" that is an enum that can be DEAD or ALIVE
 typedef enum cell{
   DEAD,
   ALIVE
@@ -153,7 +153,7 @@ int get_neighboring_alive_cell_num(Grid grid, int current_row, int current_col){
 
   for(int temp_row = current_row - 1; temp_row <= current_row + 1; temp_row++){
     for(int temp_col = current_col - 1; temp_col <= current_col + 1; temp_col++){
-      
+
       bool does_cell_exist = (temp_row >= 0 && temp_row < MAXROW) && (temp_col >= 0 && temp_col < MAXCOL);
       bool is_cell_the_current_cell = (temp_row == current_row)&&(temp_col == current_col);
 
@@ -163,7 +163,7 @@ int get_neighboring_alive_cell_num(Grid grid, int current_row, int current_col){
 
     }//end of column for loop
   }//end of row for loop
-  
+
   return count;
 }//end of get_neighboring_alive_cell_num function
 
@@ -178,6 +178,7 @@ void check_for_rules(Grid grid, Grid clone_grid){
       int neighbor_num = get_neighboring_alive_cell_num(grid, row, col);
 
       if(grid[row][col] == DEAD){
+        //Current cell is DEAD
         if(check_for_reproduction(neighbor_num)){
           clone_grid[row][col] = ALIVE;
         }
@@ -194,12 +195,15 @@ void check_for_rules(Grid grid, Grid clone_grid){
 
     }//end of column for loop
   }//end of row for loop
-  
+
+  //When the grid has no ALIVE cells, then the game loop ends
   if(alive == 0){
     running = false;
   }
-  
+
+  //Once the next frame is done updating, we replace the current frame with it
   copy_this_grid_to_that_grid(clone_grid, grid);
+  //Clears the next frame's data so we can use it for later
   make_grid_blank(clone_grid);
 }//end of check_for_rules function
 
@@ -214,7 +218,7 @@ void initialize(Grid grid, Grid clone){
 
 void update(Grid grid, Grid clone){
   check_for_rules(grid, clone);
-  //This function will allow us to clear the screen for our next frame.  
+  //This function will allow us to clear the screen for our next frame.
   clear_screen();
 }
 
@@ -223,10 +227,22 @@ void render(Grid grid){
   print_grid(grid);
 }
 
+
+//***************************************************************************
 //This is where our program starts
-
-
+//***************************************************************************
+/* Notes on how our game loop works
+ * At the top of this file, we have found out our frames per second (FPS) and how long in milliseconds each frame is(FRAME_LENGTH).
+ * This part of the program is trying to find out when we switch frames by just using our <time.h>?
+ * We store a picture of the current time, which is in CPU ticks, in the variable "start_ticks", and keep updating the "end_ticks" with every cycle of our loop.
+ * "delta" is the length between these two ticks in milliseconds, so we compare "delta" to our "FRAME_LENGTH" until we find that they are the same or "delta" is greater.
+ * Once we do, we reset "delta" to zero and "start_ticks" to the current time.
+ * That's how our game loop works.
+ *
+ * Look below for how ticks are converted to milliseconds.
+ */
 int main(){
+  //Predefining variables
   float delta = 0;
   float start_ticks = clock();
   float end_ticks = 0;
